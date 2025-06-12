@@ -1,0 +1,16 @@
+import zipfile
+zip_path = '/content/drive/MyDrive/human.zip'
+extract_path = '/content/human'
+
+with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+    zip_ref.extractall(extract_path)
+
+print("Extraction complete!")
+
+zip_path = '/content/drive/MyDrive/wild_boar.zip'
+extract_path = '/content/wild_boar'
+
+with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+    zip_ref.extractall(extract_path)
+
+print("Extraction complete!")
