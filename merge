@@ -1,0 +1,47 @@
+import os, shutil
+
+wild_boar = "/content/wild_boar"
+human = "/content/human"
+merged = "/content/wildboar_human_dataset"
+
+splits = {
+    'train': 'train',
+    'val': 'valid'  # Map 'val' to your actual folder name
+}
+
+# Create folders
+for split in splits:
+    os.makedirs(f"{merged}/images/{split}", exist_ok=True)
+    os.makedirs(f"{merged}/labels/{split}", exist_ok=True)
+
+# Function to copy data
+def copy_data(src, dst, class_id_override=None):
+    for split, src_split in splits.items():
+        img_src_path = f"{src}/{src_split}/images"
+        lbl_src_path = f"{src}/{src_split}/labels"
+
+        # Copy images into correct split folder
+        for img in os.listdir(img_src_path):
+            shutil.copy(
+                os.path.join(img_src_path, img),
+                os.path.join(dst, "images", split, img)
+            )
+
+        # Copy and update label files
+        for lbl in os.listdir(lbl_src_path):
+            in_file = os.path.join(lbl_src_path, lbl)
+            out_file = os.path.join(dst, "labels", split, lbl)
+
+            with open(in_file, 'r') as rf:
+                lines = rf.readlines()
+
+            with open(out_file, 'w') as wf:
+                for line in lines:
+                    parts = line.strip().split()
+                    if class_id_override is not None:
+                        parts[0] = str(class_id_override)
+                    wf.write(' '.join(parts) + '\n')
+
+# Copy wild boar (class 0) and human (class 1) data
+copy_data(wild_boar, merged, class_id_override=0)
+copy_data(human, merged, class_id_override=1)
