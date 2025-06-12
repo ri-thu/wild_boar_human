@@ -1,0 +1,1 @@
+!python train.py --img 640 --batch 16 --epochs 25 --data /content/wildboar_human_dataset/data.yaml --weights yolov5s.pt --name wildboar_human_detector
